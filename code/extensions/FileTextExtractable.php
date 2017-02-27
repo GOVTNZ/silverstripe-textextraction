@@ -52,7 +52,13 @@ class FileTextExtractable extends DataExtension
      */
     public function getFileContent()
     {
+    	if ($this->owner instanceof File) {
         return $this->extractFileAsText();
+		} else if ($this->owner instanceof DMSDocument) {
+    		return $this->extractFileAsText(true);
+		}
+
+		return null;
     }
 
     /**
@@ -83,7 +89,9 @@ class FileTextExtractable extends DataExtension
             return null;
         }
 
+		if (!$disableCache) {
         $this->getTextCache()->save($this->owner, $text);
+		}
 
         return $text;
     }
